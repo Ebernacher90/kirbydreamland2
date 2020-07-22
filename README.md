@@ -1,6 +1,6 @@
-# Kirby's Dream Land
+# Kirby's Dream Land 2
 
-This is a disassembly of Kirby's Dream Land (Game Boy).
+This is a disassembly of Kirby's Dream Land 2 (Game Boy).
 
 It builds the following rom:
 
