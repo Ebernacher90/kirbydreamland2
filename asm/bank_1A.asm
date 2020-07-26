@@ -1,84 +1,84 @@
 SECTION "Bank1A", ROMX, BANK[$1A]
 
-Unknown_0x68000:
+ResetStackPointer:
 	ld sp,$FFFF
 
-Unknown_0x68003:
-	ld a,[$FF00+$44]
+InitializeGameboy:
+	ld a,[rLY] ;Wait for VBlank
 	cp $91
-	jr nz,Unknown_0x68003
-	xor a
-	ld [$FF00+$40],a
-	ld a,$0A
-	ld [$0000],a
+	jr nz,InitializeGameboy
+	xor a ;Resets all LCDC flags
+	ld [rLCDC],a 
+	ld a,CART_RAM_ENABLE
+	ld [MBC1RamEnable],a
 	ld hl,$8000
 	ld bc,$2000
-	ld a,$00
-	call Unknown_0x062F
+	ld a,$00 ;not sure why they didn't use `xor a`?
+	call LoadByteToRamInit
 	ld hl,$C000
 	ld bc,$2000
 	ld a,$00
-	call Unknown_0x062F
+	call LoadByteToRamInit
 	ld sp,$E000
 	ld hl,$FE00
 	ld bc,$0100
 	ld a,$00
-	call Unknown_0x062F
+	call LoadByteToRamInit
 	ld hl,$FF80
 	ld bc,$007F
 	ld a,$00
-	call Unknown_0x062F
+	call LoadByteToRamInit
 	ld hl,$A000
 	ld bc,$1C00
 	ld a,$00
-	call Unknown_0x062F
+	call LoadByteToRamInit
 	xor a
-	ld [$FF00+$0F],a
-	ld a,$07
-	ld [$FF00+$FF],a
+	ld [rIF],a 
+	ld a, IEF_VBLANK | IEF_LCDC | IEF_TIMER
+	ld [rIE],a
 	ld a,$FF
-	ld [$FF00+$05],a
+	ld [rTIMA],a
 	ld a,$BC
-	ld [$FF00+$06],a
+	ld [rTMA],a
 	xor a
-	ld [$FF00+$07],a
+	ld [rTAC],a
 	ld a,$40
-	ld [$FF00+$41],a
+	ld [rSTAT],a
 	ld a,$FF
-	ld [$FF00+$45],a
+	ld [rLYC],a
 	ld [$DA29],a
 	ld a,$1A
-	call Unknown_0x05F3
+	call ChangeBankAndHRAM
 	ld hl,Unknown_0x680E8
 	ld de,$FF88
 	ld bc,$000A
-	call Unknown_0x0621
+	call LoadDataToRamInit
 	ld hl,$DA21
 	ld a,$02
 	ld [hld],a
 	ld [hl],$2B
 	xor a
 	ld [$DA1C],a
-	ld a,$1E
-	ld hl,$4232
-	call Unknown_0x05E5
-	ld a,$07
-	ld hl,Unknown_0x697BC
-	call Unknown_0x05E5
-	ld a,$07
-	ld hl,$401D
-	call Unknown_0x05E5
+	ld a,bank(UnknownForeignCall_0x78232)
+	ld hl,UnknownForeignCall_0x78232
+	call CallForeignBank
+	ld a,bank(UnknownForeignCall_0x1D7BC)
+	ld hl,UnknownForeignCall_0x1D7BC
+	call CallForeignBank
+	ld a,bank(UnknownForeignCall_0x1C01D)
+	ld hl,UnknownForeignCall_0x1C01D
+	call CallForeignBank
 	xor a
-	ld [$FF00+$47],a
-	ld [$CD00],a
-	ld [$FF00+$48],a
+	ld [rBGP],a
+	ld [$CD00],a ;Seems like the palletes are stored in RAM, most likely for fades
+	ld [rOBP0],a
 	ld [$CD01],a
-	ld [$FF00+$49],a
+	ld [rOBP1],a
 	ld [$CD02],a
-	ld [$FF00+$42],a
-	ld [$FF00+$43],a
-	ld [$FF00+$4A],a
-	ld [$FF00+$4B],a
+	ld [rSCY],a
+	ld [rSCX],a
+	ld [rWY],a
+	ld [rWX],a
 	ld [$DA2B],a
 	ld a,$C0
 	ld [$DA08],a
@@ -87,7 +87,7 @@ Unknown_0x68003:
 	ld a,$C3
 	ld [$DA10],a
 	ld hl,$0342
-	call Unknown_0x0604
+	call StoreHLToRam
 	ld hl,$DA13
 	ld a,$C3
 	ld [hli],a
@@ -100,7 +100,7 @@ Unknown_0x68003:
 	ld [hl],$03
 	ei
 	ld a,$04
-	ld [$FF00+$07],a
+	ld [rTAC],a
 	jp Unknown_0x10DE
 
 Unknown_0x680E8:

@@ -78,7 +78,7 @@ INCBIN "baserom.gb", $0060, $0100 - $0060
 
 SECTION "start", ROM0[$100]
 	nop
-	jp Unknown_0x0150
+	jp Start
 
 SECTION "Header", ROM0[$134]
 	db "KIRBY2";Title
@@ -103,11 +103,11 @@ SECTION "Header", ROM0[$134]
 
 SECTION "Home", ROM0[$150]
 
-Unknown_0x0150:
+Start:
 	di
-	ld a,$1A
-	ld [$2100],a
-	jp Unknown_0x68000
+	ld a, bank(ResetStackPointer) ;Bank 1A
+	ld [MBC1RomBank],a
+	jp ResetStackPointer
 
 Unknown_0x0159:
 	ld a,[$FF00+$B5]
@@ -342,10 +342,10 @@ Unknown_0x028A:
 	ld a,[$FF00+$A4]
 	push af
 	ld a,$00
-	call Unknown_0x05F3
+	call ChangeBankAndHRAM
 	call Unknown_0x2BFD
 	pop af
-	call Unknown_0x05F3
+	call ChangeBankAndHRAM
 	ld a,[$FF00+$FF]
 	or $01
 	ld [$FF00+$FF],a
@@ -600,7 +600,7 @@ Unknown_0x03FF:
 	ld hl,$6002
 	ld a,$1E
 	call Unknown_0x05CF
-	jp Unknown_0x0150
+	jp Start
 
 Unknown_0x041E:
 	ld d,a
@@ -932,7 +932,7 @@ Unknown_0x05BF:
 	push af
 	ld a,[$FF00+$96]
 	call Unknown_0x05DD
-	call Unknown_0x0621
+	call LoadDataToRamInit
 	pop af
 	jr Unknown_0x05DD
 
@@ -947,22 +947,24 @@ Unknown_0x05CF:
 
 Unknown_0x05DD:
 	di
-	ld [$2100],a
+	ld [MBC1RomBank],a
 	ld [$FF00+$A4],a
 	ei
 	ret
 
-Unknown_0x05E5:
+CallForeignBank:
+	;A is the bank being switched to
 	ld [$FF00+$96],a
-	ld a,[$FF00+$A4]
+	ld a,[$FF00+$A4] ;The previous bank is stored in the stack
 	push af
 	ld a,[$FF00+$96]
-	call Unknown_0x05F3
+	call ChangeBankAndHRAM
 	call Unknown_0x0620
-	pop af
+	pop af 
 
-Unknown_0x05F3:
-	ld [$2100],a
+ChangeBankAndHRAM:
+	;Changes the bank and saves the new bank to HRAM
+	ld [MBC1RomBank],a
 	ld [$FF00+$A4],a
 	ret
 
@@ -975,7 +977,7 @@ Unknown_0x05F9:
 	ei
 	ret
 
-Unknown_0x0604:
+StoreHLToRam:
 	ld a,l
 	ld [$DA11],a
 	ld a,h
@@ -998,36 +1000,42 @@ INCBIN "baserom.gb", $061D, $0620 - $061D
 Unknown_0x0620:
 	jp hl
 
-Unknown_0x0621:
+LoadDataToRamInit:
+	;HL is the location of the Data being loaded
+	;DE is the destination for the data
+	;BC is the length of the data in bytes
 	inc b
 	inc c
-	jr Unknown_0x0628
+	jr LoadDataToRamDec
 
-Unknown_0x0625:
+LoadDataToRam:
 	ld a,[hli]
 	ld [de],a
 	inc de
 
-Unknown_0x0628:
+LoadDataToRamDec:
 	dec c
-	jr nz,Unknown_0x0625
+	jr nz,LoadDataToRam
 	dec b
-	jr nz,Unknown_0x0625
+	jr nz,LoadDataToRam
 	ret
 
-Unknown_0x062F:
+LoadByteToRamInit:
+	;HL is the location data is being loaded to
+	;BC is the number of bytes to write to HL
+	;A is the byte being loaded.
 	inc b
 	inc c
-	jr Unknown_0x0634
+	jr LoadByteToRamDec
 
-Unknown_0x0633:
+LoadByteToRam:
 	ld [hli],a
 
-Unknown_0x0634:
+LoadByteToRamDec:
 	dec c
-	jr nz,Unknown_0x0633
+	jr nz,LoadByteToRam
 	dec b
-	jr nz,Unknown_0x0633
+	jr nz,LoadByteToRam
 	ret
 
 Unknown_0x063B:
@@ -1133,7 +1141,7 @@ Unknown_0x06BF:
 Unknown_0x06C0:
 	ld [$DA36],a
 	ld hl,$0342
-	jp Unknown_0x0604
+	jp StoreHLToRam
 
 Unknown_0x06C9:
 	ld a,[$CD0C]
@@ -1170,11 +1178,11 @@ Unknown_0x06EF:
 	ld a,[$FF00+$A4]
 	push af
 	ld a,$1E
-	call Unknown_0x05F3
+	call ChangeBankAndHRAM
 	ld e,h
 	call Unknown_0x7A00C
 	pop af
-	call Unknown_0x05F3
+	call ChangeBankAndHRAM
 	jr Unknown_0x06B8
 
 Unknown_0x0708:
@@ -2264,7 +2272,7 @@ Unknown_0x0C61:
 	ld l,$03
 	ld de,$DA4B
 	ld bc,$009B
-	call Unknown_0x0621
+	call LoadDataToRamInit
 	ld a,[$FF00+$9A]
 	ld d,a
 	ret
@@ -2273,7 +2281,7 @@ Unknown_0x0C71:
 	ld e,$03
 	ld hl,$DA4B
 	ld bc,$009B
-	call Unknown_0x0621
+	call LoadDataToRamInit
 	ld a,[$FF00+$9A]
 	ld d,a
 	ret
@@ -3320,7 +3328,7 @@ Unknown_0x1196:
 	pop hl
 	ld a,[$FF00+$84]
 	call Unknown_0x05DD
-	jp Unknown_0x0621
+	jp LoadDataToRamInit
 	xor a
 	ld [$A082],a
 	ld [$FF00+$A5],a
@@ -3785,7 +3793,7 @@ Unknown_0x1469:
 	ld hl,$BB00
 	ld bc,$0100
 	ld a,$00
-	call Unknown_0x062F
+	call LoadByteToRamInit
 	xor a
 	ld hl,$DB4F
 	ld [hli],a
@@ -3823,7 +3831,7 @@ Unknown_0x1469:
 	ld hl,$CD56
 	ld bc,$0018
 	ld a,$00
-	call Unknown_0x062F
+	call LoadByteToRamInit
 	xor a
 	ld [$DB72],a
 	ld [$DB70],a
@@ -8068,7 +8076,7 @@ Unknown_0x2B13:
 	ld a,$80
 	ld [$FF00+$45],a
 	ld a,[$DD37]
-	call Unknown_0x05F3
+	call ChangeBankAndHRAM
 	ld sp,$DD35
 	pop hl
 	ld sp,hl
@@ -8083,7 +8091,7 @@ Unknown_0x2B13:
 
 Unknown_0x2B83:
 	ld a,[$DD34]
-	call Unknown_0x05F3
+	call ChangeBankAndHRAM
 	ld sp,$DD32
 	pop hl
 	ld sp,hl
@@ -8159,7 +8167,7 @@ INCBIN "baserom.gb", $2BF5, $2BFD - $2BF5
 
 Unknown_0x2BFD:
 	ld a,$1F
-	call Unknown_0x05F3
+	call ChangeBankAndHRAM
 	ld b,$07
 
 Unknown_0x2C04:
@@ -8219,7 +8227,7 @@ Unknown_0x2C48:
 	cp b
 	jr nz,Unknown_0x2C52
 	ld a,$1E
-	call Unknown_0x05F3
+	call ChangeBankAndHRAM
 
 Unknown_0x2C52:
 	dec b
@@ -11370,7 +11378,7 @@ Unknown_0x3CD2:
 	ld hl,$9960
 	ld de,$9C00
 	ld bc,$00E0
-	call Unknown_0x0621
+	call LoadDataToRamInit
 	ld hl,$DF35
 	ld a,$32
 	ld [hli],a

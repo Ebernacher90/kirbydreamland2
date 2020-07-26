@@ -1,3 +1,6 @@
+INCLUDE "hardware.inc"
+INCLUDE "constants.asm"
+
 INCLUDE "asm/bank_00.asm"
 INCLUDE "asm/bank_01.asm"
 INCLUDE "asm/bank_02.asm"

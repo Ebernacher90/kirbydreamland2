@@ -1,0 +1,3 @@
+; MBC1
+MBC1RomBank EQU  $2100
+MBC1RamEnable EQU $0000

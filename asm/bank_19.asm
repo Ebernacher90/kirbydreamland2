@@ -261,7 +261,7 @@ Unknown_0x64233:
 	ld hl,$8000
 	ld de,$9000
 	ld bc,$0800
-	call Unknown_0x0621
+	call LoadDataToRamInit
 	ld hl,Unknown_0x6729C
 	ld de,$9800
 	jp Unknown_0x0708
@@ -273,7 +273,7 @@ Unknown_0x64251:
 	ld hl,$8000
 	ld de,$9000
 	ld bc,$0800
-	call Unknown_0x0621
+	call LoadDataToRamInit
 	ld hl,Unknown_0x6731C
 	ld de,$9800
 	jp Unknown_0x0708
@@ -285,7 +285,7 @@ Unknown_0x6426F:
 	ld hl,$8000
 	ld de,$9000
 	ld bc,$0800
-	call Unknown_0x0621
+	call LoadDataToRamInit
 	ld hl,Unknown_0x673C9
 	ld de,$9800
 	jp Unknown_0x0708
@@ -297,7 +297,7 @@ Unknown_0x6428D:
 	ld hl,$8000
 	ld de,$9000
 	ld bc,$0800
-	call Unknown_0x0621
+	call LoadDataToRamInit
 	ld hl,$7478
 	ld de,$9800
 	jp Unknown_0x0708
@@ -309,7 +309,7 @@ Unknown_0x642AB:
 	ld hl,$8000
 	ld de,$9000
 	ld bc,$0800
-	call Unknown_0x0621
+	call LoadDataToRamInit
 	ld hl,Unknown_0x6752C
 	ld de,$9800
 	jp Unknown_0x0708
@@ -321,14 +321,14 @@ Unknown_0x642C9:
 	ld hl,$8000
 	ld de,$9000
 	ld bc,$0800
-	call Unknown_0x0621
+	call LoadDataToRamInit
 	ld hl,Unknown_0x675BC
 	ld de,$CF00
 	call Unknown_0x0708
 	ld hl,$CF00
 	ld de,$9800
 	ld bc,$0400
-	call Unknown_0x0621
+	call LoadDataToRamInit
 	ld a,l
 	ld [$DF1C],a
 	ld a,h
@@ -351,7 +351,7 @@ Unknown_0x64305:
 	ld hl,$8000
 	ld de,$9000
 	ld bc,$0800
-	call Unknown_0x0621
+	call LoadDataToRamInit
 	ld hl,Unknown_0x67732
 	ld de,$9800
 	jp Unknown_0x0708
@@ -364,7 +364,7 @@ Unknown_0x6432C:
 	ld hl,$8000
 	ld de,$9000
 	ld bc,$0800
-	call Unknown_0x0621
+	call LoadDataToRamInit
 	ld hl,$7815
 	ld de,$9800
 	jp Unknown_0x0708

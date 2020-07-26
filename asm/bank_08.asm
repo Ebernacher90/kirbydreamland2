@@ -31,7 +31,7 @@ Unknown_0x20022:
 	ld hl,$A000
 	ld de,$DAE6
 	ld bc,$004D
-	call Unknown_0x0621
+	call LoadDataToRamInit
 	ld a,[$DA46]
 	ld [$DB33],a
 	ld a,$A0
@@ -42,7 +42,7 @@ Unknown_0x20022:
 	ld de,$A000
 	ld hl,$DAE6
 	ld bc,$004D
-	call Unknown_0x0621
+	call LoadDataToRamInit
 	ld a,[$DB33]
 	ld [$DA46],a
 	ret
@@ -571,7 +571,7 @@ Unknown_0x2049B:
 	ld hl,$DBD0
 	ld bc,$012C
 	ld a,$00
-	call Unknown_0x062F
+	call LoadByteToRamInit
 	ld a,$D0
 	ld [$DCFD],a
 	ld a,$DB
@@ -1940,7 +1940,7 @@ Unknown_0x21EA9:
 	ld h,[hl]
 	ld l,a
 	ld de,$BC00
-	call Unknown_0x0621
+	call LoadDataToRamInit
 	ld hl,$4000
 	ld a,$07
 	call Unknown_0x05CF

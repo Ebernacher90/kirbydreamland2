@@ -14,6 +14,7 @@ SECTION "Bank07", ROMX, BANK[$07]
 	ld [hl],a
 	ld [$DA0E],a
 	ret
+UnknownForeignCall_0x1C01D:
 	ld hl,$D900
 
 Unknown_0x1C020:
@@ -2218,6 +2219,7 @@ INCBIN "baserom.gb", $1D5D2, $1D623 - $1D5D2
 
 UnknownData_0x1D629:
 INCBIN "baserom.gb", $1D629, $1D7BC - $1D629
+UnknownForeignCall_0x1D7BC:
 	ld de,$D700
 	ld hl,$0000
 	jr Unknown_0x1D7CF
@@ -2343,11 +2345,11 @@ INCBIN "baserom.gb", $1D7DC, $1DA1C - $1D7DC
 	ld hl,$8FF0
 	ld bc,$0010
 	ld a,$FF
-	call Unknown_0x062F
+	call LoadByteToRamInit
 	ld hl,$9C00
 	ld bc,$0400
 	ld a,$FF
-	call Unknown_0x062F
+	call LoadByteToRamInit
 	ld a,$47
 	ld [$FF00+$40],a
 	ret
@@ -3267,7 +3269,7 @@ Unknown_0x1DFE2:
 	ld hl,$8000
 	ld de,$9000
 	ld bc,$0800
-	call Unknown_0x0621
+	call LoadDataToRamInit
 	ld hl,Unknown_0x1E97D
 	ld de,$9800
 	call Unknown_0x0708

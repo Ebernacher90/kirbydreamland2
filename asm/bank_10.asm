@@ -45,11 +45,11 @@ INCBIN "baserom.gb", $43944, $43A2D - $43944
 	ld hl,$9800
 	ld bc,$0400
 	ld a,$00
-	call Unknown_0x062F
+	call LoadByteToRamInit
 	ld hl,$9C00
 	ld bc,$0400
 	ld a,$00
-	call Unknown_0x062F
+	call LoadByteToRamInit
 	ld e,$FF
 	ld hl,Unknown_0x40232
 	ld a,$1F
@@ -64,11 +64,11 @@ INCBIN "baserom.gb", $43944, $43A2D - $43944
 	ld hl,$8000
 	ld de,$9000
 	ld bc,$0800
-	call Unknown_0x0621
+	call LoadDataToRamInit
 	ld hl,$8FF0
 	ld bc,$0010
 	ld a,$FF
-	call Unknown_0x062F
+	call LoadByteToRamInit
 	ld hl,Unknown_0x43944
 	ld de,$CF00
 	call Unknown_0x0708
