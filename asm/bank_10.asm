@@ -53,14 +53,14 @@ INCBIN "baserom.gb", $43944, $43A2D - $43944
 	ld e,$FF
 	ld hl,Unknown_0x40232
 	ld a,$1F
-	call Unknown_0x05CF
+	call CallForeignBankNoInturrupts
 	ld e,$00
 	ld hl,Unknown_0x4206D
 	ld a,$1E
-	call Unknown_0x05CF
+	call CallForeignBankNoInturrupts
 	ld hl,Unknown_0x432D1
 	ld de,$8000
-	call Unknown_0x0708
+	call StoreDEToRAM
 	ld hl,$8000
 	ld de,$9000
 	ld bc,$0800
@@ -71,7 +71,7 @@ INCBIN "baserom.gb", $43944, $43A2D - $43944
 	call LoadByteToRamInit
 	ld hl,Unknown_0x43944
 	ld de,$CF00
-	call Unknown_0x0708
+	call StoreDEToRAM
 	call Unknown_0x43C90
 	ld a,$45
 	ld [$FF00+$40],a
@@ -79,15 +79,15 @@ INCBIN "baserom.gb", $43944, $43A2D - $43944
 	ld e,$1F
 	ld hl,Unknown_0x42011
 	ld a,$1E
-	call Unknown_0x05CF
+	call CallForeignBankNoInturrupts
 	ld de,$0201
 	ld hl,Unknown_0x40246
 	ld a,$1A
-	call Unknown_0x05CF
+	call CallForeignBankNoInturrupts
 	ld b,$00
 	ld hl,Unknown_0x41B06
 	ld a,$07
-	call Unknown_0x05CF
+	call CallForeignBankNoInturrupts
 	ld a,$A8
 	ld [$DA2D],a
 	ld a,$14
@@ -95,7 +95,7 @@ INCBIN "baserom.gb", $43944, $43A2D - $43944
 	ld e,$47
 	ld hl,Unknown_0x40299
 	ld a,$1E
-	call Unknown_0x05CF
+	call CallForeignBankNoInturrupts
 
 Unknown_0x43AD6:
 	call Unknown_0x43B84
@@ -119,7 +119,7 @@ Unknown_0x43AD6:
 	ld e,$47
 	ld hl,Unknown_0x40299
 	ld a,$1E
-	call Unknown_0x05CF
+	call CallForeignBankNoInturrupts
 
 Unknown_0x43B0C:
 	call Unknown_0x43BCC
@@ -143,7 +143,7 @@ Unknown_0x43B0C:
 	ld e,$47
 	ld hl,Unknown_0x40299
 	ld a,$1E
-	call Unknown_0x05CF
+	call CallForeignBankNoInturrupts
 
 Unknown_0x43B42:
 	call Unknown_0x43C15
@@ -170,11 +170,11 @@ Unknown_0x43B5E:
 	ld de,$0204
 	ld hl,Unknown_0x4027B
 	ld a,$1A
-	call Unknown_0x05CF
+	call CallForeignBankNoInturrupts
 	call Unknown_0x0437
 	ld hl,Unknown_0x41ADA
 	ld a,$07
-	call Unknown_0x05CF
+	call CallForeignBankNoInturrupts
 	ret
 
 Unknown_0x43B84:

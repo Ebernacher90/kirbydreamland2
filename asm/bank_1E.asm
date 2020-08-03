@@ -514,7 +514,7 @@ Unknown_0x79E8C:
 	ld [$FF00+$47],a
 	push de
 	ld de,$8800
-	call Unknown_0x0708
+	call StoreDEToRAM
 	ld hl,$9800
 	ld de,$000C
 	ld a,$80
